@@ -1,3 +1,4 @@
+<!-- Exercise 0.5 -->
 ```mermaid
 sequenceDiagram
     participant browser
