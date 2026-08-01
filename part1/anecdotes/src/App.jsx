@@ -20,12 +20,8 @@ const App = () => {
   }
 
   const updateVote = () => {
-    var newAnecdotesVoteCounts = anecdotesVoteCounts.map((c, i) => {
-      if (selected === i) {
-        return c + 1
-      } 
-      return c
-    })
+    var newAnecdotesVoteCounts = [...anecdotesVoteCounts]
+    newAnecdotesVoteCounts[selected] += 1
     setAnecdotesVoteCounts(newAnecdotesVoteCounts)
   }
 
