@@ -10,11 +10,7 @@ const Content = (props) => {
   )
 }
 
-const Part = (props) => (
-  <p>
-  {props.part.name} {props.part.exercises}
-  </p>
-)
+const Part = (props) => <p>{props.part.name} {props.part.exercises}</p>
 
 const Total = (props) => {
   return (
