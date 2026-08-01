@@ -13,6 +13,7 @@ const App = () => {
   ]
   const [anecdotesVoteCounts, setAnecdotesVoteCounts] = useState(Array(anecdotes.length).fill(0))
   const [selected, setSelected] = useState(0)
+  const [mostVotedAnecdoteIndex, setMostVotedAnecdoteIndex] = useState(0)
 
   const updateSelectedIndex = () => {
     const newIndex = Math.floor(Math.random() * anecdotes.length)
@@ -22,15 +23,21 @@ const App = () => {
   const updateVote = () => {
     var newAnecdotesVoteCounts = [...anecdotesVoteCounts]
     newAnecdotesVoteCounts[selected] += 1
+    if (newAnecdotesVoteCounts[selected] > newAnecdotesVoteCounts[mostVotedAnecdoteIndex]) {
+      setMostVotedAnecdoteIndex(selected)
+    }
     setAnecdotesVoteCounts(newAnecdotesVoteCounts)
   }
 
   return (
     <div>
+      <h2>Anecdote of the dat</h2>
       <p>{anecdotes[selected]}</p>
       <p>has {anecdotesVoteCounts[selected]} votes</p>
       <button onClick={updateVote}>vote</button>
       <button onClick={updateSelectedIndex}>Next anecdote</button>
+      <h2>Anecdote with the most votes</h2>
+      <p>{anecdotes[mostVotedAnecdoteIndex]}</p>
     </div>
   )
 }
