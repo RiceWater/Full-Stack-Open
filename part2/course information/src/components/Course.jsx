@@ -16,7 +16,15 @@ const Part = (props) => (
   </p>
 )
 
-const Total = (props) => <p>Number of exercises {props.parts.reduce((acc, cum) => acc + cum.exercises, 0)}</p>
+const Total = (props) => {
+  return (
+    <p>
+      <strong>
+        total of {props.parts.reduce((acc, cum) => acc + cum.exercises, 0)} exercises
+      </strong>
+    </p>
+  )
+}
 
 const Course = ({course}) => {
   return (
