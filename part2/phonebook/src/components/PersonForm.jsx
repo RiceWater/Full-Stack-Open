@@ -9,6 +9,7 @@ const PersonForm = ({ persons, setPersons}) => {
   const handleOnSubmitForm = (e) => {
     e.preventDefault()
     const newPerson = {name: newName, number: newNumber, id: persons.length + 1}
+    
     if (persons.map((e) => e.name).includes(newPerson.name)) {
       alert(`${newPerson.name} is already added in the phonebook`)
     } else {

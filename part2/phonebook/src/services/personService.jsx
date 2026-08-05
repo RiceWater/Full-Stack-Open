@@ -9,4 +9,11 @@ const addPerson = newPerson => {
     .then(res => res.data)
 }
 
-export default { addPerson }
+const getPersons = () => {
+    const url = baseUrl + "persons"
+    return axios
+      .get(url)
+      .then(res => res.data)
+}
+
+export default { addPerson, getPersons }

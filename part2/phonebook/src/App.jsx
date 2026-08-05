@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+import personService from './services/personService'
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filterQuery, setNewFilterQuery] = useState('')
-  
+
   useEffect(() => {
-    axios
-    .get("http://localhost:3000/persons")
-    .then((res) => {
-      setPersons(res.data)
-    })
+    personService
+      .getPersons()
+      .then((persons) => setPersons(persons))
   }, [])
+
   return (
     <div>
       <h2>Phonebook</h2>

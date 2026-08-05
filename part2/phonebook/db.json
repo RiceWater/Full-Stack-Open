@@ -59,6 +59,11 @@
       "name": "eeee",
       "number": "eeee",
       "id": "E81mhhubXQM"
+    },
+    {
+      "name": "Willie",
+      "number": "123",
+      "id": "VKOamZsxTAQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
