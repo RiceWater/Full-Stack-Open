@@ -1,5 +1,7 @@
 import { useState } from "react"
 
+import personService from "../services/personService"
+
 const PersonForm = ({ persons, setPersons}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -10,22 +12,28 @@ const PersonForm = ({ persons, setPersons}) => {
     if (persons.map((e) => e.name).includes(newPerson.name)) {
       alert(`${newPerson.name} is already added in the phonebook`)
     } else {
-      setPersons(persons.concat(newPerson))
-      setNewName("")
-      setNewNumber("")
+      personService.addPerson(newPerson)
+      .then(() => {
+        setPersons(persons.concat(newPerson))
+        setNewName("")
+        setNewNumber("")
+      })
+      .catch(err => {
+        alert("Error", err)
+      })
     }
   }
   return (
     <form onSubmit={handleOnSubmitForm}>
-      <div>
-        name: <input value={newName} onChange={(e) => setNewName(e.target.value)}/>
-      </div>
-      <div>
-        number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)}/>
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
+    <div>
+    name: <input value={newName} onChange={(e) => setNewName(e.target.value)}/>
+    </div>
+    <div>
+    number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)}/>
+    </div>
+    <div>
+    <button type="submit">add</button>
+    </div>
     </form>
   )
 }
