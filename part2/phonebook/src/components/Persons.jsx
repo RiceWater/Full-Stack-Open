@@ -1,10 +1,22 @@
-const Person = ({ person }) => <p>{person.name} {person.number}</p>
+const Person = ({ person, onDeletePerson}) => {
+  return (
+    <div>
+      {/* <p>{person.name} {person.number}</p> */}
+      <span>{person.name} {person.number} </span>
+      <button onClick={() => {
+        if (window.confirm(`Delete ${person.name}?`)) {
+          onDeletePerson(person.id)}
+        }
+      }>delete</button>
+    </div>
+  )
+}
 
-const Persons = ({ persons, filterQuery }) => {
+const Persons = ({ persons, filterQuery, onDeletePerson }) => {
   return (
       persons
       .filter((element) => element.name.includes(filterQuery))
-      .map((p) => <Person key={p.id} person={p} />)
+      .map((p) => <Person key={p.id} person={p} onDeletePerson={onDeletePerson}/>)
   )  
 }
 export default Persons;

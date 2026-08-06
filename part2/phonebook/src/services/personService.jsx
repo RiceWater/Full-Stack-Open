@@ -1,19 +1,24 @@
 import axios from "axios"
 
 const baseUrl = "http://localhost:3000/"
+const url = baseUrl + "persons"
 
 const addPerson = newPerson => {
-    const url = baseUrl + "persons"
-    return axios
+  return axios
     .post(url, newPerson)
     .then(res => res.data)
 }
 
 const getPersons = () => {
-    const url = baseUrl + "persons"
-    return axios
-      .get(url)
-      .then(res => res.data)
+  return axios
+    .get(url)
+    .then(res => res.data)
 }
 
-export default { addPerson, getPersons }
+const deletePerson = id => {
+  return axios
+  .delete(url + `/${id}`)
+  .then(res => res.data)
+}
+
+export default { addPerson, getPersons, deletePerson }

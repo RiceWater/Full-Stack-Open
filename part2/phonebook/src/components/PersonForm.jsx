@@ -14,8 +14,8 @@ const PersonForm = ({ persons, setPersons}) => {
       alert(`${newPerson.name} is already added in the phonebook`)
     } else {
       personService.addPerson(newPerson)
-      .then(() => {
-        setPersons(persons.concat(newPerson))
+      .then(storedPerson => {
+        setPersons(persons.concat(storedPerson))
         setNewName("")
         setNewNumber("")
       })

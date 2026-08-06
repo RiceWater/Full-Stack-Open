@@ -16,6 +16,19 @@ const App = () => {
       .then((persons) => setPersons(persons))
   }, [])
 
+  const handleDeletePerson = id => {
+    personService
+    .deletePerson(id)
+    .then(() => {
+      personService
+      .getPersons()
+      .then((persons) => setPersons(persons))
+    })
+    .catch(err => {
+      alert("Errorrrr", err)
+    })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -23,7 +36,7 @@ const App = () => {
       <h2>Add a New Entry</h2>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterQuery={filterQuery}/>
+      <Persons persons={persons} filterQuery={filterQuery} onDeletePerson={handleDeletePerson}/>
     </div>
   )
 }
