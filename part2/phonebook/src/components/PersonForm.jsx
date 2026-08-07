@@ -8,11 +8,30 @@ const PersonForm = ({ persons, setPersons}) => {
   
   const handleOnSubmitForm = (e) => {
     e.preventDefault()
-    const newPerson = {name: newName, number: newNumber, id: persons.length + 1}
-    
-    if (persons.map((e) => e.name).includes(newPerson.name)) {
-      alert(`${newPerson.name} is already added in the phonebook`)
+    const foundPersonIndex = persons.findIndex(element => element.name === newName)
+    if (foundPersonIndex !== -1) {
+      updateExistingPerson(foundPersonIndex)
     } else {
+      createNewPerson()
+    }
+  }
+
+  const updateExistingPerson = foundPersonIndex => {
+    const windowMessage = `${persons[foundPersonIndex].name} is already added in the phonebook. Replace old number with a new one?` 
+      if (window.confirm(windowMessage)) {
+        const personToUpdate = {...persons[foundPersonIndex], number: newNumber}
+        personService
+        .updatePerson(personToUpdate)
+        .then(res => {
+          let newPersons = persons.map(person => person.name === personToUpdate.name ? res : person)
+          setPersons(newPersons)
+        })
+      }
+  }
+
+  const createNewPerson = () => {
+      const newPerson = {name: newName, number: newNumber, id: persons.length + 1}
+      console.log("ASD")
       personService.addPerson(newPerson)
       .then(storedPerson => {
         setPersons(persons.concat(storedPerson))
@@ -22,8 +41,8 @@ const PersonForm = ({ persons, setPersons}) => {
       .catch(err => {
         alert("Error", err)
       })
-    }
   }
+
   return (
     <form onSubmit={handleOnSubmitForm}>
     <div>

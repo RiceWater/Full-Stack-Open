@@ -15,10 +15,15 @@ const getPersons = () => {
     .then(res => res.data)
 }
 
+const updatePerson = (person) => {
+  return axios
+  .put(url + `/${person.id}`, person)
+  .then(res => res.data)
+}
 const deletePerson = id => {
   return axios
   .delete(url + `/${id}`)
   .then(res => res.data)
 }
 
-export default { addPerson, getPersons, deletePerson }
+export default { addPerson, getPersons, updatePerson, deletePerson }
