@@ -5,7 +5,7 @@ const Person = ({ person, onDeletePerson}) => {
       <span>{person.name} {person.number} </span>
       <button onClick={() => {
         if (window.confirm(`Delete ${person.name}?`)) {
-          onDeletePerson(person.id)}
+          onDeletePerson(person)}
         }
       }>delete</button>
     </div>

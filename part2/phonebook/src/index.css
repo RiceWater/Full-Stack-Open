@@ -2,11 +2,23 @@
     background-color: gray;
     padding: 4px;
     border-width: 5px;
-    border-color: green;
     border-radius: 8px;
     border-style: solid;
+    border-color: green;
+}
+
+.successNotifContainer {
+    border-color: green;
 }
 
 .notif {
     color: green;
+}
+
+.errorNotifContainer {
+    border-color: red;
+}
+
+.errorNotif {
+    color: red;
 }

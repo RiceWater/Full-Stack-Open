@@ -1,45 +1,4 @@
 {
-  "persons": [
-    {
-      "name": "e",
-      "number": "e",
-      "id": "xajwzrP2S1w"
-    },
-    {
-      "name": "q",
-      "number": "q",
-      "id": "s65zq6XI8rc"
-    },
-    {
-      "name": "ddd",
-      "number": "d",
-      "id": "8T0xOOxUoYs"
-    },
-    {
-      "name": "gf",
-      "number": "gfff",
-      "id": "k3P5EpCCBQs"
-    },
-    {
-      "name": "c",
-      "number": "c",
-      "id": "PJyC9gqhIfo"
-    },
-    {
-      "name": "z",
-      "number": "z",
-      "id": "3TJpRFpKwRc"
-    },
-    {
-      "name": "f",
-      "number": "ff",
-      "id": "50aueuK7nj8"
-    },
-    {
-      "name": "g",
-      "number": "g",
-      "id": "ZrZFAiJw-No"
-    }
-  ],
+  "persons": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

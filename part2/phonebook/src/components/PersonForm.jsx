@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import personService from "../services/personService"
 
-const PersonForm = ({ persons, setPersons, setNotifMessage}) => {
+const PersonForm = ({ persons, setPersons, setNotifMessage, setIsError}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   
@@ -26,9 +26,11 @@ const PersonForm = ({ persons, setPersons, setNotifMessage}) => {
           let newPersons = persons.map(person => person.name === personToUpdate.name ? res : person)
           setPersons(newPersons)
           setNotifMessage(`Updated ${res.name}`)
+          setIsError(false)
         })
         .catch(message => {
           setNotifMessage(message)
+          setIsError(true)
         })
       }
   }
@@ -41,9 +43,11 @@ const PersonForm = ({ persons, setPersons, setNotifMessage}) => {
         setNewName("")
         setNewNumber("")
         setNotifMessage(`Added ${storedPerson.name}`)
+        setIsError(false)
       })
       .catch(message => {
         setNotifMessage(message)
+        setIsError(true)
       })
   }
 

@@ -1,7 +1,7 @@
-const MyNotification = ({message}) => {
+const MyNotification = ({message, isError}) => {
   return message === '' ? (<></>) : (
-    <div className='notifContainer'>
-      <h3 className='notif'>{message}</h3>
+    <div className={'notifContainer ' + (isError ? 'errorNotifContainer' : 'successNotifContainer')}>
+      <h3 className={'notif ' + (isError ? 'errorNotif' : 'notif')}>{message}</h3>
     </div>
   )
 }
