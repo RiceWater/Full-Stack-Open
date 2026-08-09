@@ -1,0 +1,12 @@
+.notifContainer {
+    background-color: gray;
+    padding: 4px;
+    border-width: 5px;
+    border-color: green;
+    border-radius: 8px;
+    border-style: solid;
+}
+
+.notif {
+    color: green;
+}

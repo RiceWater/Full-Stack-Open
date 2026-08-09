@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import personService from "../services/personService"
 
-const PersonForm = ({ persons, setPersons}) => {
+const PersonForm = ({ persons, setPersons, setNotifMessage}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   
@@ -25,21 +25,25 @@ const PersonForm = ({ persons, setPersons}) => {
         .then(res => {
           let newPersons = persons.map(person => person.name === personToUpdate.name ? res : person)
           setPersons(newPersons)
+          setNotifMessage(`Updated ${res.name}`)
+        })
+        .catch(message => {
+          setNotifMessage(message)
         })
       }
   }
 
   const createNewPerson = () => {
       const newPerson = {name: newName, number: newNumber, id: persons.length + 1}
-      console.log("ASD")
       personService.addPerson(newPerson)
       .then(storedPerson => {
         setPersons(persons.concat(storedPerson))
         setNewName("")
         setNewNumber("")
+        setNotifMessage(`Added ${storedPerson.name}`)
       })
-      .catch(err => {
-        alert("Error", err)
+      .catch(message => {
+        setNotifMessage(message)
       })
   }
 
