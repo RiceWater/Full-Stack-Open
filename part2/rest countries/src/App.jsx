@@ -9,8 +9,25 @@ const TooManyResults = () => {
   )
 }
 
-const CountryList = ({countries}) => {
-  return countries.map(element => <p key={element.name.common}>{element.name.common}</p>)
+const CountryList = ({countries}) => 
+  countries.map(country => <CountryRow country={country} key={country.name.common}/>
+)
+
+
+const CountryRow = ({country}) => {
+  const [showCountryDetails, setShowCountryDetails] = useState(false)
+
+  return (
+     <div key={country.name.common}>
+        <div>
+          <span>{country.name.common}</span>
+          <button onClick={() => setShowCountryDetails(!showCountryDetails)}>
+            {showCountryDetails ? "hide" : "show"}
+            </button>
+        </div>
+        { showCountryDetails && <CountryDetails country={country}/> }
+      </div>
+  )
 }
 
 const CountryDetails = ({country}) => {
@@ -69,30 +86,3 @@ const App = () => {
 }
 
 export default App
-
-// useEffect(() => {
-//     axios
-//       .get(`${baseURL}/api/name/${query}`)
-//       .then(res => res.data)
-//       .then(body => {
-//         var fetchedLanguages = []
-//         for(const value of Object.values(body.languages)) {
-//           fetchedLanguages = fetchedLanguages.concat(value)
-//         }
-
-//         const cBody = {
-//           "name": body.name.common,
-//           "capital": body.capital["0"],
-//           "area": body.area,
-//           "languages": fetchedLanguages,
-//           "flag": body.flag
-//         }
-//         setC(cBody)
-//         console.log(cBody)
-        
-//       })
-//       .catch(() => {
-//         setCountryFound(false)
-//         setC({})
-//       })
-//   }, [query])
