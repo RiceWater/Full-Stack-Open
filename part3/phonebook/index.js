@@ -25,11 +25,22 @@ const persons = [
 
 const app = express()
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (_, res) => {
     res.json(persons)
 })
 
-app.get('/info', (req, res) => {
+app.get('/api/persons/:id', (req, res) => {
+    const id = req.params.id
+    const person = persons.find(person => person.id === id)
+    if (!person) {
+        res.statusMessage = "Person does not exist"
+        res.status(404).end()
+        return 
+    }
+    res.json(person)
+})
+
+app.get('/info', (_, res) => {
     const receivedAt = new Date()
     res.send(`
         <p>Phonebook has info for ${persons.length} people</p>
