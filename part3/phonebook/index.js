@@ -53,14 +53,20 @@ const generateId = () => {
 }
 
 app.post('/api/persons', (req, res) => {
-    const name = req.body
-    console.log("====", name)
+    const name = req.body.name
     if (!name) {
         res.status(400).json({
             error: "'name' field required"
         })
         return 
+    }  
+    if (persons.find(person => person.name === name)) {
+        res.status(400).json({
+            error: "'name' field must be unique"
+        })
+        return
     }
+    
     const person = {
         "id": generateId(),
         "name": req.body.name,
