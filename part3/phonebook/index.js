@@ -24,6 +24,7 @@ var persons = [
 ]
 
 const app = express()
+app.use(express.json())
 
 app.get('/api/persons', (_, res) => {
     res.json(persons)
@@ -44,6 +45,29 @@ app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id 
     persons = persons.filter(person => person.id !== id)
     res.status(204).end()
+})
+
+const generateId = () => {
+    const id = Math.floor(Math.random() * 1_000_000_000) + 1
+    return `${id}`
+}
+
+app.post('/api/persons', (req, res) => {
+    const name = req.body
+    console.log("====", name)
+    if (!name) {
+        res.status(400).json({
+            error: "'name' field required"
+        })
+        return 
+    }
+    const person = {
+        "id": generateId(),
+        "name": req.body.name,
+        "content": req.body.content || ""
+    }
+    persons = persons.concat(person)
+    res.json(persons)
 })
 
 app.get('/info', (_, res) => {
