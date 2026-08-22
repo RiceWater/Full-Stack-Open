@@ -1,7 +1,17 @@
 const express = require('express')
 var morgan = require('morgan')
 
-
+morgan.token('type', (req, _) => JSON.stringify(req.body))
+const customMorganFormat = morgan((tokens, req, res) => {
+    return [
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms',
+        tokens.type(req, res)
+    ].join(' ')
+})
 var persons = [
     { 
       "id": "1",
@@ -26,7 +36,7 @@ var persons = [
 ]
 
 const app = express()
-app.use(morgan('tiny'))
+app.use(customMorganFormat)
 app.use(express.json())
 app.get('/api/persons', (_, res) => {
     res.json(persons)
