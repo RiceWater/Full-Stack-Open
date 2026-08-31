@@ -1,7 +1,7 @@
 import axios from "axios"
 
-const baseUrl = "http://localhost:3000/"
-const url = baseUrl + "persons"
+const baseUrl = "http://localhost:3001"
+const url = `${baseUrl}/api/persons`
 
 const addPerson = newPerson => {
   return axios

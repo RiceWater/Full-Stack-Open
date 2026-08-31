@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 var morgan = require('morgan')
 
 morgan.token('type', (req, _) => JSON.stringify(req.body))
@@ -12,6 +13,7 @@ const customMorganFormat = morgan((tokens, req, res) => {
         tokens.type(req, res)
     ].join(' ')
 })
+
 var persons = [
     { 
       "id": "1",
@@ -36,9 +38,12 @@ var persons = [
 ]
 
 const app = express()
+app.use(cors())
 app.use(customMorganFormat)
 app.use(express.json())
+
 app.get('/api/persons', (_, res) => {
+    console.log("Fetching")
     res.json(persons)
 })
 
@@ -82,10 +87,10 @@ app.post('/api/persons', (req, res) => {
     const person = {
         "id": generateId(),
         "name": req.body.name,
-        "content": req.body.content || ""
+        "number": req.body.number || ""
     }
     persons = persons.concat(person)
-    res.json(persons)
+    res.json(person)
 })
 
 app.get('/info', (_, res) => {
