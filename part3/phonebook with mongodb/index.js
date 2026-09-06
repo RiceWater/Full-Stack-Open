@@ -100,7 +100,7 @@ app.get('/info', (_, res) => {
     `)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server listening at port ${PORT}`)
 })
