@@ -22,16 +22,23 @@ const person = new mongoose.Schema({
 const Person = mongoose.model('Person', person)
 
 if (argumentLength < 4) {
-    console.log("fetch and print all entries")
+    Person.find({}).then(res => {
+        res.forEach(person => {
+            console.log(`${person.name} ${person.number}`)
+        })
+        mongoose.connection.close()
+    })
+} else if (argumentLength < 5) {
+    console.log("incomplete arguments")
+    process.exit(1)
 } else {
-    // TODO: Hnadle caaase is argLength is 4 (i.e. imcomplete person entry)
     console.log("add/update entry to database")
     const newPerson = new Person({ 
         name: process.argv[3],
         number: process.argv[4]
     })
     newPerson.save().then(res => {
-        console.log("new person saved")
+        console.log(`Added ${res.name} number ${res.number} to phonebook`)
         mongoose.connection.close()
     })
 }
