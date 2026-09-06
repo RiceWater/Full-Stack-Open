@@ -84,17 +84,18 @@ app.post('/api/persons', (req, res) => {
         return
     }
     
-    const person = {
-        "id": generateId(),
-        "name": req.body.name,
-        "number": req.body.number || ""
-    }
-    persons = persons.concat(person)
-    res.json(person)
+    const newPerson = new Person({
+        name: req.body.name,
+        number: req.body.number
+    })
+
+    newPerson.save().then(person => {
+        res.json(person)
+    })
 })
 
 app.get('/info', (_, res) => {
-    const receivedAt = new Date()
+    const receivedAt = new Date() 
     res.send(`
         <p>Phonebook has info for ${persons.length} people</p>
         <p>${receivedAt}</p>
