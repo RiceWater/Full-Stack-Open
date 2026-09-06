@@ -1,3 +1,5 @@
+require('dotenv').config()
+const Person = require('./models/person')
 const express = require('express')
 var morgan = require('morgan')
 
@@ -42,8 +44,7 @@ app.use(customMorganFormat)
 app.use(express.json())
 
 app.get('/api/persons', (_, res) => {
-    console.log("Fetching")
-    res.json(persons)
+    Person.find({}).then(persons => res.json(persons))
 })
 
 app.get('/api/persons/:id', (req, res) => {
