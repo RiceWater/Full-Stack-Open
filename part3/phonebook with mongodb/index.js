@@ -90,8 +90,12 @@ app.get('/info', (_, res, next) => {
 
 const customErrorMiddleware = (err, req, res, next) => {
     console.log(err)
-    res.statusMessage = `Error: ${err}`
-    res.status(400).send()
+    if (err.name === 'CastError') {
+        res.status(400).send({error: 'Malformed id'})
+    } else if (err.name === 'ValidationError') {
+        res.status(400).json({error: err.message})
+    }
+    next(err)
 }
 
 app.use(customErrorMiddleware)

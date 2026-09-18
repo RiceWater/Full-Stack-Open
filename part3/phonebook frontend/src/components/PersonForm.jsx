@@ -28,8 +28,8 @@ const PersonForm = ({ persons, setPersons, setNotifMessage, setIsError}) => {
           setNotifMessage(`Updated ${res.name}`)
           setIsError(false)
         })
-        .catch(message => {
-          setNotifMessage(message)
+        .catch(error => {
+          setNotifMessage(error.response.data.error)
           setIsError(true)
         })
       }
@@ -45,8 +45,8 @@ const PersonForm = ({ persons, setPersons, setNotifMessage, setIsError}) => {
         setNotifMessage(`Added ${storedPerson.name}`)
         setIsError(false)
       })
-      .catch(message => {
-        setNotifMessage(message)
+      .catch(error => {
+        setNotifMessage(error.response.data.error)
         setIsError(true)
       })
   }
