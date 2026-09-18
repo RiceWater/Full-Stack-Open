@@ -32,11 +32,24 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
+app.put('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id
+    const number = req.body.number
+    Person.findById(id).then(person => {
+        person.number = number === null ? "" : number
+        person.save().then(result => {
+            res.json(result)
+        })
+        .catch(err => next(err))
+    })
+    .catch(err => next(err))
+})
+
 app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id 
     Person.findByIdAndDelete(id).then(_ => {
         console.log("ID deleted")
-        res.status(204).end()
+        res.status(204).send()
     })
     .catch(err => next(err))
 })
@@ -52,7 +65,7 @@ app.post('/api/persons', (req, res, next) => {
     Person.find({name: { $ne: name }}).then(_ => {
         const newPerson = new Person({
             name: req.body.name,
-            number: req.body.number
+            number: req.body.number === null ? "" : req.body.number 
         })
 
         newPerson.save().then(person => {
@@ -74,10 +87,17 @@ app.get('/info', (_, res) => {
 const customErrorMiddleware = (err, req, res, next) => {
     console.log(err)
     res.statusMessage = `Error: ${err}`
-    res.status(400).end()
+    res.status(400).send()
 }
 
 app.use(customErrorMiddleware)
+
+const unknownEndpoint = (req, res) => {
+    console.log("ASDSAAAD")
+    res.status(404).send("Uknown endpoint")
+}
+
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
