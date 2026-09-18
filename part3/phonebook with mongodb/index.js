@@ -15,11 +15,6 @@ const customMorganFormat = morgan((tokens, req, res) => {
     ].join(' ')
 })
 
-const customErrorMiddleware = (error, request, response, next) => {
-    console.log(error)
-    next(error)
-}
-
 const app = express()
 app.use(express.static('dist'))
 app.use(customMorganFormat)
@@ -29,31 +24,24 @@ app.get('/api/persons', (_, res) => {
     Person.find({}).then(persons => res.json(persons))
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     const id = req.params.id
     Person.find({id: id}).then(person => {
         res.json(person)
     })
-    .catch(error => {
-        res.statusMessage = "Person does not exist"
-        res.status(404).end()
-    })
+    .catch(err => next(err))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id 
-    Person.findByIdAndDelete(id).then(person => {
+    Person.findByIdAndDelete(id).then(_ => {
         console.log("ID deleted")
         res.status(204).end()
     })
-    .catch(err => {
-        console.log("Error", err, "aasd")
-        next(error)
-    })
-    
+    .catch(err => next(err))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const name = req.body.name
     if (!name) {
         res.status(400).json({
@@ -70,15 +58,9 @@ app.post('/api/persons', (req, res) => {
         newPerson.save().then(person => {
             res.json(person)
         })
-        
+        .catch(err => next(err))
     })
-    .catch(error => {
-        res.status(400).json({
-            error: "'name' field must be unique!"
-        })
-    })
-    
-    
+    .catch(err => next(err))
 })
 
 app.get('/info', (_, res) => {
@@ -88,6 +70,12 @@ app.get('/info', (_, res) => {
         <p>${receivedAt}</p>
     `)
 })
+
+const customErrorMiddleware = (err, req, res, next) => {
+    console.log(err)
+    res.statusMessage = `Error: ${err}`
+    res.status(400).end()
+}
 
 app.use(customErrorMiddleware)
 
