@@ -26,7 +26,7 @@ app.get('/api/persons', (_, res) => {
 
 app.get('/api/persons/:id', (req, res, next) => {
     const id = req.params.id
-    Person.find({id: id}).then(person => {
+    Person.findById(id).then(person => {
         res.json(person)
     })
     .catch(err => next(err))
@@ -76,12 +76,16 @@ app.post('/api/persons', (req, res, next) => {
     .catch(err => next(err))
 })
 
-app.get('/info', (_, res) => {
+app.get('/info', (_, res, next) => {
     const receivedAt = new Date() 
-    res.send(`
-        <p>Phonebook has info for ${Person.countDocuments} people</p>
-        <p>${receivedAt}</p>
-    `)
+    Person.find({}).then(persons => {
+        res.send(`
+            <p>Phonebook has info for ${persons.length} people</p>
+            <p>${receivedAt}</p>
+        `)
+    })
+    .catch(err => next(err))
+    
 })
 
 const customErrorMiddleware = (err, req, res, next) => {
