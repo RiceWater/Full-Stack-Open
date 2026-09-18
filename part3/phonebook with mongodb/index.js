@@ -60,8 +60,14 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id 
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end()
+    Person.findByIdAndDelete(id).then(person => {
+        console.log("ID deleted")
+        res.status(204).end()
+    })
+    .catch(err => {
+        console.log("Error", err, "aasd")
+    })
+    
 })
 
 const generateId = () => {
