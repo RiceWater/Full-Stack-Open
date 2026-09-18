@@ -15,28 +15,10 @@ const customMorganFormat = morgan((tokens, req, res) => {
     ].join(' ')
 })
 
-var persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
+const customErrorMiddleware = (error, request, response, next) => {
+    console.log(error)
+    next(error)
+}
 
 const app = express()
 app.use(express.static('dist'))
@@ -49,16 +31,16 @@ app.get('/api/persons', (_, res) => {
 
 app.get('/api/persons/:id', (req, res) => {
     const id = req.params.id
-    const person = persons.find(person => person.id === id)
-    if (!person) {
+    Person.find({id: id}).then(person => {
+        res.json(person)
+    })
+    .catch(error => {
         res.statusMessage = "Person does not exist"
         res.status(404).end()
-        return 
-    }
-    res.json(person)
+    })
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id 
     Person.findByIdAndDelete(id).then(person => {
         console.log("ID deleted")
@@ -66,14 +48,10 @@ app.delete('/api/persons/:id', (req, res) => {
     })
     .catch(err => {
         console.log("Error", err, "aasd")
+        next(error)
     })
     
 })
-
-const generateId = () => {
-    const id = Math.floor(Math.random() * 1_000_000_000) + 1
-    return `${id}`
-}
 
 app.post('/api/persons', (req, res) => {
     const name = req.body.name
@@ -83,30 +61,35 @@ app.post('/api/persons', (req, res) => {
         })
         return 
     }  
-    if (persons.find(person => person.name === name)) {
-        res.status(400).json({
-            error: "'name' field must be unique"
+    Person.find({name: { $ne: name }}).then(_ => {
+        const newPerson = new Person({
+            name: req.body.name,
+            number: req.body.number
         })
-        return
-    }
-    
-    const newPerson = new Person({
-        name: req.body.name,
-        number: req.body.number
-    })
 
-    newPerson.save().then(person => {
-        res.json(person)
+        newPerson.save().then(person => {
+            res.json(person)
+        })
+        
     })
+    .catch(error => {
+        res.status(400).json({
+            error: "'name' field must be unique!"
+        })
+    })
+    
+    
 })
 
 app.get('/info', (_, res) => {
     const receivedAt = new Date() 
     res.send(`
-        <p>Phonebook has info for ${persons.length} people</p>
+        <p>Phonebook has info for ${Person.countDocuments} people</p>
         <p>${receivedAt}</p>
     `)
 })
+
+app.use(customErrorMiddleware)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
