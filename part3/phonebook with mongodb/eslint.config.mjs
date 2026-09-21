@@ -1,10 +1,14 @@
 import globals from "globals";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
 import stylisticJs from "@stylistic/eslint-plugin";
 
 export default defineConfig([
   js.configs.recommended,
+  globalIgnores([
+    "./node_modules/*",
+    "./dist/*"
+  ]),
   {
     plugins: {
       '@stylistic/js': stylisticJs
