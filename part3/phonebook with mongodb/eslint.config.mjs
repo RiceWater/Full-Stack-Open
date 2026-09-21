@@ -17,19 +17,23 @@ export default defineConfig([
       '@stylistic/js/indent': ['error', 2],
       '@stylistic/js/linebreak-style': ['error', 'unix'],
       '@stylistic/js/quotes': ['error', 'single'],
-      '@stylistic/js/semi': ['error', 'never']
+      '@stylistic/js/semi': ['error', 'never'],
+      eqeqeq: ['error', 'always'],
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-spacing': ['error', { before: true, after: true }],
     }
   },
-  { 
-    files: ['**/*.js'], 
-    languageOptions: { 
+  {
+    files: ['**/*.js'],
+    languageOptions: {
       sourceType: 'commonjs'
-    } 
+    }
   },
-  { 
-    files: ['**/*.{js,mjs,cjs}'], 
-    languageOptions: { 
-      globals: globals.browser 
-    } 
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: globals.browser
+    }
   },
 ])

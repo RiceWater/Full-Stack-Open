@@ -46,7 +46,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
-  const id = req.params.id 
+  const id = req.params.id
   Person.findByIdAndDelete(id).then(_ => {
     console.log('ID deleted')
     res.status(204).send()
@@ -60,12 +60,12 @@ app.post('/api/persons', (req, res, next) => {
     res.status(400).json({
       error: '\'name\' field required'
     })
-    return 
-  }  
-  Person.find({name: { $ne: name }}).then(_ => {
+    return
+  }
+  Person.find({ name: { $ne: name } }).then(_ => {
     const newPerson = new Person({
       name: req.body.name,
-      number: req.body.number === null ? '' : req.body.number 
+      number: req.body.number === null ? '' : req.body.number
     })
 
     newPerson.save().then(person => {
@@ -77,7 +77,7 @@ app.post('/api/persons', (req, res, next) => {
 })
 
 app.get('/info', (_, res, next) => {
-  const receivedAt = new Date() 
+  const receivedAt = new Date()
   Person.find({}).then(persons => {
     res.send(`
             <p>Phonebook has info for ${persons.length} people</p>
@@ -85,15 +85,15 @@ app.get('/info', (_, res, next) => {
         `)
   })
     .catch(err => next(err))
-    
+
 })
 
 const customErrorMiddleware = (err, req, res, next) => {
   console.log(err)
   if (err.name === 'CastError') {
-    res.status(400).send({error: 'Malformed id'})
+    res.status(400).send({ error: 'Malformed id' })
   } else if (err.name === 'ValidationError') {
-    res.status(400).json({error: err.message})
+    res.status(400).json({ error: err.message })
   }
   next(err)
 }
@@ -101,7 +101,6 @@ const customErrorMiddleware = (err, req, res, next) => {
 app.use(customErrorMiddleware)
 
 const unknownEndpoint = (req, res) => {
-  console.log('ASDSAAAD')
   res.status(404).send('Uknown endpoint')
 }
 
