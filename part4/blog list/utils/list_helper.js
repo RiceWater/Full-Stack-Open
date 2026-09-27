@@ -40,4 +40,25 @@ const mostBlogs = (blogs) => {
     return { author: authorWithMostBlogs, blogs: authorBlogCounter[authorWithMostBlogs] }
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+    if (blogs.length === 0) {
+        return "No author"
+    }
+    let authorLikesTracker = {}
+    for(let i = 0; i < blogs.length; i++ ) {
+        if (authorLikesTracker[`${blogs[i].author}`] === undefined) {
+            authorLikesTracker[`${blogs[i].author}`] = 0
+        } 
+        authorLikesTracker[`${blogs[i].author}`] += blogs[i].likes
+    }
+    let keys = Object.keys(authorLikesTracker)
+    let authorWithMostBlogs = keys[0]
+    for(let i = 0; i < keys.length; i++ ) {
+        if (authorLikesTracker[keys[i]] > authorLikesTracker[authorWithMostBlogs]) {
+            authorWithMostBlogs = keys[i]
+        }
+    }
+    return { author: authorWithMostBlogs, likes: authorLikesTracker[authorWithMostBlogs] }
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }

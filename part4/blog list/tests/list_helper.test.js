@@ -126,3 +126,50 @@ describe('most blogs', () => {
         assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', blogs: 2 })
     })
 })
+
+describe('most likes', () => {
+    const sampleBlogs = [
+        {
+            id: '5a422aa71b54a676234d17f8',
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+            likes: 5,
+        },
+        {
+            id: '5a422aa71b54a676234d17f8',
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+            likes: 15,
+        },
+        {
+            id: '5a422aa71b54a676234d17f8',
+            title: 'Go To Statement Considered Harmful',
+            author: 'Jake Dijkstra',
+            url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+            likes: 15,
+        }
+    ]
+
+    test('of an empty array will return an informative string', () => {
+        const blogs = []
+        const result = listHelper.mostLikes(blogs)
+        assert.strictEqual(result, 'No author')
+    })
+
+    test('of an array of blogs will return the author with the most likes and their number of likes', () => {
+        const blogs = sampleBlogs
+        const result = listHelper.mostLikes(blogs)
+        assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', likes: 20 })
+    })
+
+    test('of an array of blogs with identical number of authored blogs will return the author with the most likes and their number of likes', () => {
+        let blogs = sampleBlogs
+        let extraBlog = sampleBlogs[2]
+        extraBlog.likes = 5
+        blogs.push(extraBlog)
+        const result = listHelper.mostLikes(blogs)
+        assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', likes: 20 })
+    })
+})
