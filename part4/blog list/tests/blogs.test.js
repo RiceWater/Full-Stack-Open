@@ -38,5 +38,6 @@ describe('get /api/blogs from a database', () => {
 })
 
 after(async () => {
+  await Blog.deleteMany({})
   mongoose.connection.close()
 })
