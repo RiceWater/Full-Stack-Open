@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const blogRouter = require('./controlllers/blog')
 const errorHandler = require('./utils/logger')
-const { mongoUrl, _ } = require('./utils/config')
+const mongoUrl = require('./utils/config').mongoUrl
 const app = express()
 
 mongoose.connect(mongoUrl, { family: 4, dbName: "blogList" })
