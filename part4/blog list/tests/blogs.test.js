@@ -77,6 +77,28 @@ describe('POST /api/blogs/', () => {
     const blogs = await blogsInDB()
     assert.strictEqual(blogs[2].likes, 0)
   })
+
+  test('with json data without the title field will return http 400', async () => {
+    const newBlog = {
+      author: "Threee",
+      url: "website3",
+      likes: 10
+    }
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('with json data without the url field will return http 400', async () => {
+    const newBlog = {
+      title: "Three",
+      author: "Threee",
+      likes: 10
+    }
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
 after(async () => {
