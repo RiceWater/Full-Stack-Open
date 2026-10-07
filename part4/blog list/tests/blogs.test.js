@@ -44,6 +44,26 @@ describe('get /api/blogs from a database', () => {
   })
 })
 
+describe('POST /api/blogs/', () => {
+
+  test('with the right json data will create a new blog in the database', async () => {
+    const newBlog = {
+      title: "Three",
+      author: "Threee",
+      url: "website3",
+      likes: 200
+    }
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogs = await blogsInDB()
+    assert.strictEqual(3, blogs.length)
+    assert.strictEqual(blogs[2].title, newBlog.title)
+  })
+})
+
 after(async () => {
   await Blog.deleteMany({})
   mongoose.connection.close()
