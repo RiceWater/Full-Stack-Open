@@ -35,6 +35,13 @@ describe('get /api/blogs from a database', () => {
     const content = response.body.map(blog => blog.title)
     assert.strictEqual(content.includes('One'), true)
   })
+
+  test('will have blog entities with "id" as its unique identifier and not have "_id"', async () => {
+    const response = await api.get('/api/blogs')
+    const blogKeys = Object.keys(response.body[0])
+    assert.strictEqual(blogKeys.includes('id'), true)
+    assert.strictEqual(blogKeys.includes('_id'), false)
+  })
 })
 
 after(async () => {
