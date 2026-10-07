@@ -119,6 +119,27 @@ describe('DELETE /api/blogs', () => {
 
 })
 
+describe('PUT /api/blogs', () => {
+
+  test('with an invalid id as its params returns a 400 status code', async () => {
+    await api.delete('/api/blogs/1')
+      .expect(400)
+  })
+
+  test('with a valid json body returns the updated object and correct status', async () => {
+    const blogs = await blogsInDB()
+    const blogIDToUpdate = blogs[0].id
+    const newLikes = { likes: 9899 }
+    const response = await api.put(`/api/blogs/${blogIDToUpdate}`)
+      .send(newLikes)
+      .expect(200)
+
+    assert.strictEqual(blogIDToUpdate, response.body.id)
+    assert.strictEqual(newLikes.likes, response.body.likes)
+  })
+
+})
+
 after(async () => {
   await Blog.deleteMany({})
   mongoose.connection.close()

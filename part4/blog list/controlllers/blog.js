@@ -14,10 +14,12 @@ blogRouter.post('/', async (request, response) => {
 }) 
 
 blogRouter.delete('/:id', async (request, response) => {
-  if (request.params.id === undefined) {
-    return response.status(401).end()
-  }
   const result = await Blog.findByIdAndDelete(request.params.id)
+  return response.json(result)
+})
+
+blogRouter.put('/:id', async (request, response) => {
+  const result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
   return response.json(result)
 })
 
