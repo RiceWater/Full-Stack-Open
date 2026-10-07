@@ -62,6 +62,21 @@ describe('POST /api/blogs/', () => {
     assert.strictEqual(3, blogs.length)
     assert.strictEqual(blogs[2].title, newBlog.title)
   })
+
+  test('with json data without the likes field will create a new blog in the database with likes set to 0', async () => {
+    const newBlog = {
+      title: "Three",
+      author: "Threee",
+      url: "website3"
+    }
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogs = await blogsInDB()
+    assert.strictEqual(blogs[2].likes, 0)
+  })
 })
 
 after(async () => {
