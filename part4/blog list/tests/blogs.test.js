@@ -101,6 +101,24 @@ describe('POST /api/blogs/', () => {
   })
 })
 
+describe('DELETE /api/blogs', () => {
+
+  test('with an invalid id as its params returns a 400 status code', async () => {
+    await api.delete('/api/blogs/1')
+      .expect(400)
+  })
+
+  test('with a valid id as its params returns the deleted object and correct status', async () => {
+    const blogs = await blogsInDB()
+    const blogToDelete = blogs[0]
+    const response = await api.delete(`/api/blogs/${blogs[0].id}`)
+      .expect(200)
+
+    assert.strictEqual(blogToDelete.id, response.body.id)
+  })
+
+})
+
 after(async () => {
   await Blog.deleteMany({})
   mongoose.connection.close()
