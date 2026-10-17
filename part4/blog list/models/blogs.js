@@ -21,11 +21,11 @@ const blogSchema = new mongoose.Schema({
 })
 
 blogSchema.set('toJSON', {
-    transform: (doc, ret) => {
-        ret.id = doc._id.toString()
-        delete ret.__v
-        delete ret._id
-    }
+  transform: (doc, ret) => {
+    ret.id = doc._id.toString()
+    delete ret.__v
+    delete ret._id
+  }
 })
 
 const Blog = mongoose.model('Blog', blogSchema)
