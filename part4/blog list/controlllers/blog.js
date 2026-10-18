@@ -1,7 +1,6 @@
 const blogRouter = require('express').Router()
-const { default: mongoose } = require('mongoose')
 const Blog = require('../models/blogs')
-const User = require('./../models/users')
+const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (_, response) => {
   const blogs = await Blog.find({}).populate('user')
@@ -9,11 +8,17 @@ blogRouter.get('/', async (_, response) => {
 })
 
 blogRouter.post('/', async (request, response) => {
-
-  const user = await User.find({})
+  const bearerToken = request.get('authorization')
+  const cleanToken = bearerToken?.startsWith('Bearer') 
+    ? bearerToken.replace('Bearer ', '') 
+    : bearerToken
+  if (cleanToken === null || cleanToken.length === 0) {
+    return response.status(400).json({ error: "Missing bearer token"} )
+  }
+  const userObj = jwt.verify(cleanToken, process.env.JWT_SECRET)
   const blog = new Blog({
     ...request.body, 
-    user: user.length === 0 ? null : new mongoose.Types.ObjectId(user[0].id)
+    user: userObj.id
   })
   const result = await blog.save()
   return response.status(201).json(result)  
