@@ -1,14 +1,20 @@
 const blogRouter = require('express').Router()
+const { default: mongoose } = require('mongoose')
 const Blog = require('../models/blogs')
-const mongoose = require('mongoose')
+const User = require('./../models/users')
 
 blogRouter.get('/', async (_, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user')
   return response.json(blogs)
 })
 
 blogRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
+
+  const user = await User.find({})
+  const blog = new Blog({
+    ...request.body, 
+    user: user.length === 0 ? null : new mongoose.Types.ObjectId(user[0].id)
+  })
   const result = await blog.save()
   return response.status(201).json(result)  
 }) 

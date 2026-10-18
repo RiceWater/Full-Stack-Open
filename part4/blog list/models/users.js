@@ -10,17 +10,24 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: [3, "Paassword must be least 3 characters long"],
+    minlength: [3, "Password must be least 3 characters long"],
   },
   name: {
     type: String,
     required: true
-  }
+  },
+  blogs: [
+    { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog'
+    }
+  ]
 })
 
 userSchema.set('toJSON', {
   transform: (doc, ret) => {
     ret.id = doc._id.toString()
+    delete ret.password
     delete ret.__v
     delete ret._id
   }
