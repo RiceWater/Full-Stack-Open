@@ -2,6 +2,8 @@ const userRouter = require('express').Router()
 const User = require('./../models/users')
 const bcrypt = require('bcrypt')
 const Blog = require('./../models/blogs')
+const jwt = require('jsonwebtoken')
+
 userRouter.get('/', async (request, response) => {
   const users = await User.find({}).populate('blogs')
   return response.json(users)
@@ -24,9 +26,13 @@ userRouter.post('/', async (request, response) => {
       password: hashedPassword,
       blogs: blogs.length === 0 ? [] : blogs.map(e => e.id)
     })  
-
+    
     const result = await newUser.save()
-    return response.json(result)
+    const jwtSecret = process.env.JWT_SECRET
+    const userForJWT = { id: result.id, username: result.username }
+    const signedJWT = jwt.sign(userForJWT, jwtSecret)
+    const jsonResult = result.toJSON()
+    return response.json({...jsonResult, token: signedJWT })
   } catch (err) {
     return response.status(400).json({ error: err})
   }
