@@ -7,4 +7,13 @@ const errorHandler = (error, _, response, next) => {
     next(error)
 }
 
-module.exports = errorHandler
+const getTokenHandler = (request, response, next) => {
+  const token = request.get('authorization')
+  const cleanToken = token?.startsWith('Bearer ') 
+    ? token.replace('Bearer ', '') 
+    : token
+  request.token = cleanToken 
+  next()
+}
+
+module.exports = { errorHandler, getTokenHandler }

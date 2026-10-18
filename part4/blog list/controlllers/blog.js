@@ -8,14 +8,11 @@ blogRouter.get('/', async (_, response) => {
 })
 
 blogRouter.post('/', async (request, response) => {
-  const bearerToken = request.get('authorization')
-  const cleanToken = bearerToken?.startsWith('Bearer') 
-    ? bearerToken.replace('Bearer ', '') 
-    : bearerToken
-  if (cleanToken === null || cleanToken.length === 0) {
+  
+  if (request.token === null || request.token.length === 0) {
     return response.status(400).json({ error: "Missing bearer token"} )
   }
-  const userObj = jwt.verify(cleanToken, process.env.JWT_SECRET)
+  const userObj = jwt.verify(request.token, process.env.JWT_SECRET)
   const blog = new Blog({
     ...request.body, 
     user: userObj.id
