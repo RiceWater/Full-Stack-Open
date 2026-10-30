@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import CreateForm from './components/CreateForm'
 import blogService from './services/blogs'
 import loginService from './services/users'
-
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -18,12 +19,15 @@ const App = () => {
       if (sessionName && sessionToken && sessionUsername) {
         setUser({token: sessionToken, username: sessionUsername, name: sessionName})
       }
-      
     }
+
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+
     fetchStoredUser()
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    getBlogs()
   }, []) 
 
   const handleUsername = (event) => {
@@ -63,35 +67,13 @@ const App = () => {
         <h2>blogs</h2>
         <span>{user.name} logged in</span>
         <button onClick={handleLogout}>log out</button>
+        <CreateForm sessionToken={user.token} setBlogs={setBlogs}/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
       </div>
     )
   }
-}
-
-const LoginForm = ({handleUsername, handlePassword, handleLogin}) => {
-  return (
-    <>
-      <h2>login to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            username
-            <input id="username" title="username" onChange={handleUsername}/>
-          </label>
-        </div>
-        <div>
-          <label>
-            password
-            <input id="password" title="password" onChange={handlePassword}/>
-          </label>
-        </div>
-        <button type="submit">log in</button>
-      </form>
-    </>
-  )
 }
 
 export default App
