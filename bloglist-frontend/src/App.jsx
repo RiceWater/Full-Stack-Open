@@ -4,12 +4,14 @@ import LoginForm from './components/LoginForm'
 import CreateForm from './components/CreateForm'
 import blogService from './services/blogs'
 import loginService from './services/users'
+import NotificationAlert from './components/NotificationAlert'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState({})
+  const [notificationMessage, setNotificationMessage] = useState("")
   
   useEffect(() => {
     const fetchStoredUser = async () => {
@@ -29,6 +31,15 @@ const App = () => {
     fetchStoredUser()
     getBlogs()
   }, []) 
+
+  useEffect(() => {
+    if (notificationMessage.length === 0) {
+      return
+    }
+    setTimeout(() => {
+      setNotificationMessage("")
+    }, 2000)
+  }, [notificationMessage])
 
   const handleUsername = (event) => {
     setUsername(event.target.value)
@@ -65,9 +76,13 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
+        {
+          notificationMessage.length !== 0 && 
+          <NotificationAlert message={notificationMessage} isError={false}/>
+        }
         <span>{user.name} logged in</span>
         <button onClick={handleLogout}>log out</button>
-        <CreateForm sessionToken={user.token} setBlogs={setBlogs}/>
+        <CreateForm sessionToken={user.token} setBlogs={setBlogs} setNotificationMessage={setNotificationMessage}/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
