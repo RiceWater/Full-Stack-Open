@@ -12,7 +12,8 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState({})
   const [notificationMessage, setNotificationMessage] = useState("")
-  
+  const [isNotificationMessageError, setIsNotificationMessageError] = useState(false)
+
   useEffect(() => {
     const fetchStoredUser = async () => {
       const sessionUsername = window.localStorage.getItem("sessionUsername")
@@ -38,6 +39,7 @@ const App = () => {
     }
     setTimeout(() => {
       setNotificationMessage("")
+      setIsNotificationMessageError(false)
     }, 2000)
   }, [notificationMessage])
 
@@ -50,16 +52,21 @@ const App = () => {
   }
 
   const handleLogin = async (event) => {
-    event.preventDefault()
-    const credentials = {
-      username: username,
-      password: password
+    try {
+      event.preventDefault()  
+      const credentials = {
+        username: username,
+        password: password
+      }
+      const user = await loginService.performLogin(credentials)
+      setUser(user)
+      window.localStorage.setItem("sessionUsername", user.username)
+      window.localStorage.setItem("sessionToken", user.token)
+      window.localStorage.setItem("sessionName", user.name)
+    } catch (error) {
+      setIsNotificationMessageError(true)  
+      setNotificationMessage(error.response.data.error) 
     }
-    const user = await loginService.performLogin(credentials)
-    setUser(user)
-    window.localStorage.setItem("sessionUsername", user.username)
-    window.localStorage.setItem("sessionToken", user.token)
-    window.localStorage.setItem("sessionName", user.name)
   }
 
   const handleLogout = (event) => {
@@ -71,14 +78,14 @@ const App = () => {
   }
 
   if (Object.keys(user).length === 0) {
-    return <LoginForm handleUsername={handleUsername} handlePassword={handlePassword} handleLogin={handleLogin} />
+    return <LoginForm notificationMessage={notificationMessage} isNotificationMessageError={isNotificationMessageError} handleUsername={handleUsername} handlePassword={handlePassword} handleLogin={handleLogin} />
   } else {
     return (
       <div>
         <h2>blogs</h2>
         {
           notificationMessage.length !== 0 && 
-          <NotificationAlert message={notificationMessage} isError={false}/>
+          <NotificationAlert message={notificationMessage} isError={isNotificationMessageError}/>
         }
         <span>{user.name} logged in</span>
         <button onClick={handleLogout}>log out</button>

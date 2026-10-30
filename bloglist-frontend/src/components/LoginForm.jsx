@@ -1,7 +1,14 @@
-const LoginForm = ({handleUsername, handlePassword, handleLogin}) => {
+import NotificationAlert from "./NotificationAlert"
+
+const LoginForm = ({notificationMessage, isNotificationMessageError, handleUsername, handlePassword, handleLogin}) => {
+  console.log(isNotificationMessageError)
   return (
     <>
       <h2>login to application</h2>
+      {
+        notificationMessage.length !== 0 && 
+        <NotificationAlert message={notificationMessage} isError={isNotificationMessageError}/>
+      }
       <form onSubmit={handleLogin}>
         <div>
           <label>
